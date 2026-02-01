@@ -8,14 +8,14 @@ export const Signup = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       return res.status(409).json({
-        messages: "User is already exist, you can login",
+        message: "User is already exist, you can login",
         success: false,
       });
     }
     const newUser = new User({ name, email, password });
     newUser.password = await bcrypt.hash(password, 10);
     await newUser.save();
-    res.status(201).json({ message: "User signup successfull" });
+    res.status(201).json({ success: true, message: "User signup successfull" });
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
@@ -32,7 +32,7 @@ export const Login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(403).json({
-        messages: "Auth Failed email or password Wrong",
+        message: "Auth Failed email or password Wrong",
         success: false,
       });
     }
